@@ -65,7 +65,11 @@ bwplot(alcohol~Seat,data=ucdavis1)
 let's try a ttest
 
 ```{r, eval=FALSE}
-ttestGC(alcohol~Seat,data=ucdavis1)
+#ttestGC(alcohol~Seat,data=ucdavis1)
+our3way <-aov(ucdavis1$alcohol~ucdavis1$Seat)
+summary.aov(our3way)
+mytukey <- TukeyHSD(our3way)
+plot(mytukey)
 ```
 oops that does not work --- somehow we need to have a variable that puts the front sitters in one bucket, and everyone else in the other bucket.
 
