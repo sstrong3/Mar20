@@ -1,0 +1,103 @@
+---
+title: "statsTestMeans"
+author: "Dr K"
+date: "March 19, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(tigerstats)
+require(tidyverse)
+```
+
+## pennstate1 data frame
+
+
+```{r}
+data(pennstate1)
+pennstate1
+```
+
+
+
+
+###test whether there is a difference between the average hours of sleep between guys and gals.
+
+```{r}
+bwplot(HrsSleep~Sex,data=pennstate1)
+```
+
+###test whether there is a difference between the fastest speed ever driven between guys and gals.
+
+```{r}
+bwplot(Fastest~Sex,data=pennstate1)
+```
+
+## Ucdavis1 data frame
+
+
+
+```{r}
+data(ucdavis1)
+ucdavis1
+```
+
+### test if there is a difference in GPA between guys and gals
+
+```{r}
+bwplot(GPA~Sex,data=ucdavis1)
+```
+
+### test if there is a difference in alcholic drinks consumed per week between LibArts and nonLib students
+
+```{r}
+bwplot(alcohol~class,data=ucdavis1)
+```
+
+
+### test if there is a difference in alcohol consumption between those students who sit in the front of the class and those who sit in the middle or back.
+
+```{r}
+bwplot(alcohol~Seat,data=ucdavis1)
+```
+
+let's try a ttest
+
+```{r, eval=FALSE}
+ttestGC(alcohol~Seat,data=ucdavis1)
+```
+oops that does not work --- somehow we need to have a variable that puts the front sitters in one bucket, and everyone else in the other bucket.
+
+
+dplyr is a tool that can do this
+
+```{r}
+
+test2 <- mutate(ucdavis1,letter = ifelse (Seat %in% c("Front"), "y", "n"))
+bwplot(alcohol~letter,data=test2)
+ttestGC(alcohol~letter,data=test2,graph=TRUE)
+ t.test(alcohol~letter,data=test2)               
+```
+now do some work to put a couple of extra binary variables in there so we could do a ttest
+
+```{r}
+ucdavis1$justFront[ucdavis1$Seat == "Front"] <- "Yep"
+ucdavis1$justFront[ucdavis1$Seat != "Front"] <- "nope"
+ucdavis1$justback[ucdavis1$Seat == "Back"] <- "Yep"
+ucdavis1$justback[ucdavis1$Seat != "Back"] <- "nope"
+```
+
+```{r}
+bwplot(alcohol~justFront,data=ucdavis1)
+ttestGC(alcohol~justFront,data=ucdavis1,graph=TRUE)
+ t.test(alcohol~justFront,data=ucdavis1)               
+```
+now the back
+
+
+```{r}
+bwplot(alcohol~justback,data=ucdavis1)
+ttestGC(alcohol~justback,data=ucdavis1,graph=TRUE)
+ t.test(alcohol~justback,data=ucdavis1)               
+```
