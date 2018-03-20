@@ -27,11 +27,23 @@ pennstate1
 ```{r}
 bwplot(HrsSleep~Sex,data=pennstate1)
 ```
-
+ Let us run a ttest
+ 
+ 
+```{r}
+ttestGC(HrsSleep~Sex,data=pennstate1)
+t.test(HrsSleep~Sex,data=pennstate1)
+```
+ 
 ###test whether there is a difference between the fastest speed ever driven between guys and gals.
 
 ```{r}
 bwplot(Fastest~Sex,data=pennstate1)
+```
+
+```{r}
+ttestGC(Fastest~Sex,data=pennstate1)
+t.test(Fastest~Sex,data=pennstate1)
 ```
 
 ## Ucdavis1 data frame
@@ -47,12 +59,14 @@ ucdavis1
 
 ```{r}
 bwplot(GPA~Sex,data=ucdavis1)
+t.test(GPA~Sex,data=ucdavis1)
 ```
 
 ### test if there is a difference in alcholic drinks consumed per week between LibArts and nonLib students
 
 ```{r}
 bwplot(alcohol~class,data=ucdavis1)
+t.test(alcohol~class,data=ucdavis1)
 ```
 
 
@@ -60,6 +74,7 @@ bwplot(alcohol~class,data=ucdavis1)
 
 ```{r}
 bwplot(alcohol~Seat,data=ucdavis1)
+ttestGC(alcohol~Seat,data=ucdavis1)
 ```
 
 let's try a ttest
